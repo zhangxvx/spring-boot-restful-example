@@ -5,6 +5,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 
@@ -13,6 +14,7 @@ import javax.annotation.Resource;
 @Slf4j
 @EnableCaching
 @MapperScan("com.example.mapper")
+@ServletComponentScan
 @SpringBootApplication
 public class SpringBootDemoApplication implements CommandLineRunner {
     @Resource

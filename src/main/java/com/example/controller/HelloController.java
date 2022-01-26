@@ -25,4 +25,9 @@ public class HelloController {
     public Response<Object> ex() throws Exception {
         throw new Exception("测试异常");
     }
+
+    @RequestMapping("/pro")
+    public Response<Object> pro() {
+        return Response.success("Hello World! This is a protected api");
+    }
 }
