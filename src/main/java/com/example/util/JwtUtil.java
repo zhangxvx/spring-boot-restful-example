@@ -34,9 +34,12 @@ public class JwtUtil {
          iat: jwt的签发时间
          jti: jwt的唯一身份标识，主要用来作为一次性token,从而回避重放攻击。
          */
-        return JWT.create().withHeader(map) // header
+        return JWT.create()
+                .withHeader(map) // header
                 .withClaim("username", username) //user info
-                .withIssuer("server").withAudience("client").withIssuedAt(iatDate) // sign time
+                .withIssuer("server")
+                .withAudience("client")
+                .withIssuedAt(iatDate) // sign time
                 .withExpiresAt(expiresDate) // expire time
                 .sign(Algorithm.HMAC256(SECRET));
     }
