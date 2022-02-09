@@ -5,10 +5,27 @@ spring:
     resources:
       add-mappings: false
 
-  datasource:
-    username: ENC(fiwfxo+yRUr5KE2Pxi6rrbu/ud5xWzLKYYTbqtU+no0cPHxdjpn61uZC/5AKol8L)
-    password: ENC(tfvDzl96dZ0jNyTxZ7nVpBZKlRD8YV+8QHp2RFMELNkict3cbar2z6W83nIKqLZw)
-    url: jdbc:mysql://127.0.0.1:3306/db_test?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=GMT%2B8
+  shardingsphere:
+    datasource:
+      names: master
+      master:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://127.0.0.1:3306/db_test
+        username: ENC(fiwfxo+yRUr5KE2Pxi6rrbu/ud5xWzLKYYTbqtU+no0cPHxdjpn61uZC/5AKol8L)
+        password: ENC(tfvDzl96dZ0jNyTxZ7nVpBZKlRD8YV+8QHp2RFMELNkict3cbar2z6W83nIKqLZw)
+    sharding:
+      tables:
+        t_order:
+          actual-data-nodes: master.t_order_$->{0..1}
+          table-strategy:
+            standard:
+              sharding-column: order_id
+              precise-algorithm-class-name: com.example.config.datasource.PreciseModuloShardingTableAlgorithm
+              range-algorithm-class-name: com.example.config.datasource.RangeModuloShardingTableAlgorithm
+    props:
+      sql:
+        show: true
 
 mybatis-plus:
   configuration:

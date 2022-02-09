@@ -23,7 +23,7 @@ public class MybatisPlusCodeGenerator {
         String outputXmlDir = "D:\\Workspaces\\Java\\spring-boot-restful-example\\mybatis\\mapper";
         String author = "zhangxv";
         String parent = "com.example";
-        String tables = "user";
+        String tables = "t_order";
 
         FastAutoGenerator.create(url, username, password).globalConfig(builder -> {
             builder.author(author)
