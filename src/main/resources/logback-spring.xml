@@ -15,6 +15,9 @@ debug:当此属性设置为true时，将打印出logback内部日志信息，实
         <encoder>
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
         </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>info</level>
+        </filter>
     </appender>
 
     <!-- 全量日志debug  -->
@@ -29,10 +32,13 @@ debug:当此属性设置为true时，将打印出logback内部日志信息，实
             <!--日志文件保留天数 -->
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>debug</level>
+        </filter>
     </appender>
 
     <!-- 日志总开关 -->
-    <root level="INFO">
+    <root level="debug">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </root>
