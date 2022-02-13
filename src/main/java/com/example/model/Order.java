@@ -1,12 +1,13 @@
 package com.example.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author zhangxv
@@ -15,7 +16,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 @TableName("t_order")
 public class Order {
 
-    @TableId("order_id")
+    @TableId(value = "order_id", type = IdType.INPUT)
     private String orderId;
 
     @TableField("order_name")

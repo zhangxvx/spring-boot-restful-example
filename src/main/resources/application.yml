@@ -14,18 +14,41 @@ spring:
         jdbc-url: jdbc:mysql://127.0.0.1:3306/db_test
         username: ENC(fiwfxo+yRUr5KE2Pxi6rrbu/ud5xWzLKYYTbqtU+no0cPHxdjpn61uZC/5AKol8L)
         password: ENC(tfvDzl96dZ0jNyTxZ7nVpBZKlRD8YV+8QHp2RFMELNkict3cbar2z6W83nIKqLZw)
-    sharding:
-      tables:
-        t_order:
-          actual-data-nodes: master.t_order_$->{0..1}
-          table-strategy:
-            standard:
-              sharding-column: order_id
-              precise-algorithm-class-name: com.example.config.datasource.PreciseModuloShardingTableAlgorithm
-              range-algorithm-class-name: com.example.config.datasource.RangeModuloShardingTableAlgorithm
+    rules:
+      sharding:
+        tables:
+          t_order:
+            actual-data-nodes: master.t_order_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: order_id
+                sharding-algorithm-name: default-sharding-algorithm
+            key-generate-strategy:
+              column: order_id
+              key-generator-name: default-key-generator
+        sharding-algorithms:
+          default-sharding-algorithm:
+            type: default-sharding-algorithm
+        key-generators:
+          default-key-generator:
+            type: default-key-generate-algorithm
+
+      encrypt:
+        encryptors:
+          default-encryptor:
+            type: default-encrypt-algorithm
+            props:
+              aes-key-value: 123456abc
+        tables:
+          t_order:
+            columns:
+              order_name:
+                cipher-column: order_name_encrypt
+                plain-column: order_name
+                encryptor-name: default-encryptor
+
     props:
-      sql:
-        show: true
+      sql-show: true
 
 mybatis-plus:
   configuration:
