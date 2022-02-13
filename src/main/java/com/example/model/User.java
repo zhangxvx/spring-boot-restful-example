@@ -13,7 +13,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
  * @author zhangxv
  * @since 2022-01-23
  */
-@TableName("user")
+@TableName("t_user")
 public class User {
 
     @TableId(value = "id", type = IdType.AUTO)
