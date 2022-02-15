@@ -16,7 +16,7 @@ debug:当此属性设置为true时，将打印出logback内部日志信息，实
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>info</level>
+            <level>debug</level>
         </filter>
     </appender>
 

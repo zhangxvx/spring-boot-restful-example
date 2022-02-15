@@ -1,4 +1,4 @@
-package com.example.handler;
+package com.example.interceptor;
 
 import com.example.entity.Response;
 import com.example.enums.ResEnum;

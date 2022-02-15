@@ -3,10 +3,12 @@ package com.example.entity;
 import com.example.enums.ResEnum;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 
 @Getter
 @Setter
+@ToString
 public class Response<T> {
     /**
      * 状态
