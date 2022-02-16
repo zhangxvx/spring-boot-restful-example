@@ -19,6 +19,7 @@ public class CacheServiceImp implements CacheService {
     public Response<Object> clear(String cacheName) {
         Cache cache = cacheManager.getCache(cacheName);
         if (cache != null) {
+            log.info("cacheManager:{}. clear cacheName:{}.", cacheManager.getClass().getSimpleName(), cacheName);
             cache.clear();
         }
         return Response.success(null);
@@ -29,7 +30,7 @@ public class CacheServiceImp implements CacheService {
         cacheManager.getCacheNames().forEach(cacheName -> {
             Cache cache = cacheManager.getCache(cacheName);
             if (cache != null) {
-                log.info("cache clear cacheName:{}.", cacheName);
+                log.info("cacheManager:{}. clear cacheName:{}.", cacheManager.getClass().getSimpleName(), cacheName);
                 cache.clear();
             }
         });
