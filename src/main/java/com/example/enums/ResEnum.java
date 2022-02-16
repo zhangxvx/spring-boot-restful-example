@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum ResEnum {
     SUCCESS(200, "成功"),
+    NO_CONTENT(204, "无内容"),
     NOT_FOUND(404, "不存在"),
     ERROR(500, "异常"),
     UNAUTHORIZED(401, "认证失败"),
