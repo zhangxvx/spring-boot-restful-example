@@ -5,6 +5,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Deprecated
 public class MyDispatcherServlet extends DispatcherServlet {
 
     @Override

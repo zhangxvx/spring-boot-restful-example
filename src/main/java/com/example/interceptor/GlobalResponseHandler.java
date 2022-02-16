@@ -12,8 +12,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Deprecated
 @Slf4j
-@ControllerAdvice
+// @ControllerAdvice
 public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
 
     @Override
