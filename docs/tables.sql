@@ -11,12 +11,13 @@ CREATE TABLE `t_security_config`
 
 CREATE TABLE `t_flow_log`
 (
-    `apply_id`    varchar(64) NOT NULL,
-    `name`        varchar(50) NULL,
-    `mobile`      varchar(11) NULL,
-    `id_no`       varchar(18) NULL,
-    `apply_time`  timestamp NULL DEFAULT current_timestamp (),
-    `update_time` timestamp NULL DEFAULT current_timestamp () ON UPDATE current_timestamp (),
+    `apply_id`     varchar(64) NOT NULL,
+    `name`         varchar(1024) DEFAULT NULL,
+    `name_decrypt` varchar(50)   DEFAULT NULL,
+    `mobile`       varchar(11)   DEFAULT NULL,
+    `id_no`        varchar(18)   DEFAULT NULL,
+    `apply_time`   timestamp NULL DEFAULT current_timestamp (),
+    `update_time`  timestamp NULL DEFAULT current_timestamp () ON UPDATE current_timestamp (),
     PRIMARY KEY (`apply_id`) USING BTREE
 ) ENGINE=InnoDB;
 CREATE TABLE `t_flow_log_0` like t_flow_log;
