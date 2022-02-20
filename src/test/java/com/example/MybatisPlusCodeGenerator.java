@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import com.example.controller.base.BaseController;
+import com.example.business.controller.base.BaseController;
 import com.ulisesbocchio.jasyptspringboot.encryptor.DefaultLazyEncryptor;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.core.env.StandardEnvironment;
@@ -23,7 +23,7 @@ public class MybatisPlusCodeGenerator {
         String outputXmlDir = "D:\\Workspaces\\Java\\spring-boot-restful-example\\mybatis\\mapper";
         String author = "zhangxv";
         String parent = "com.example";
-        String tables = "t_order";
+        String[] tables = {"t_security_config", "t_business_log", "t_flow_log"};
 
         FastAutoGenerator.create(url, username, password).globalConfig(builder -> {
             builder.author(author)

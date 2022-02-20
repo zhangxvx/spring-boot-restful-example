@@ -17,14 +17,14 @@ spring:
     rules:
       sharding:
         tables:
-          t_order:
-            actual-data-nodes: master.t_order_$->{0..1}
+          t_flow_log:
+            actual-data-nodes: master.t_flow_log_$->{0..1}
             table-strategy:
               standard:
-                sharding-column: order_id
+                sharding-column: apply_id
                 sharding-algorithm-name: default-sharding-algorithm
             key-generate-strategy:
-              column: order_id
+              column: apply_id
               key-generator-name: default-key-generator
         sharding-algorithms:
           default-sharding-algorithm:
@@ -40,11 +40,11 @@ spring:
             props:
               aes-key-value: 123456abc
         tables:
-          t_order:
+          t_flow_log:
             columns:
-              order_name:
-                cipher-column: order_name_encrypt
-                plain-column: order_name
+              name:
+                cipher-column: name
+                plain-column: name_decrypt
                 encryptor-name: default-encryptor
 
     props:
@@ -57,3 +57,16 @@ mybatis-plus:
 jasypt:
   encryptor:
     password: 123456
+
+server:
+  unauthorized:
+    path: /unauthorized
+
+security:
+  aes:
+    key: 3zif06k67u05rji68vhy25o6yhh46rgy
+  rsa:
+    private-key: MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAJKmNskEZvl3q/f0SgkOpxmzara5WUe4tHlFXeojSAtQOdTIEYYi1A+G8OGyBKqz/ve7za3r0fcfYTpZrIVmN3jCndTQjwsQs6iIOpO9hZHGa3SGPIeL21TEdT2R6+zA4l+eus+eBTnLecdI82yvXL/tYGHziwmIxmSbV80bpFI/AgMBAAECgYB6XlPMvO2oMOHAj4nPsPhii8H6IwOKw2dk4isRmssdFZ6MHT3yLdHB+xm5WrBmOLgCxCVGgUa87ORWqkk5LygNSwpzMIzGdNZupHZ9xi3Hat70NW1SQW9gRd+YqGsgFcGlWiJwWnCeu53B82SKMqVs7D6WORmDiM4JoqNlpMLWAQJBAMLzTgdwDR751k6ugMZEpUBTkv4ifqh9F0vEbJGqSjlQo0rLqZ9lIZbVJWZ1Hj4oVYvJt1dBm/n1E8UW0vHA778CQQDAkrnQ8F8EUzgyieafJ3gULXAX4mw2OnU1zif4Nwi8fzrmrwNBZ2FRDl2WxrV4r+s65TwWT2ErdHmIYXbCdT2BAkEAgq1Izp+DjBH4X4GFfGGjS705uPQyZoqDRRyDkhjN7CFrc8WVC+1kWJDDoyw6e3vZ6/vo06p8/U4UVHZ6K+ciTQJAOwkAE/CMgGvur3edDq9v3WeslHXiTKGRKyR/FlXwxLCQYwXGDrfdmpa31DAok84CY/TAfepp1IOJemi+mpCMgQJBAKOqJ2v54xq6J3jUDpzEtGhfoZ01bqYsADErEKrBMsx0056dWtcuHexshBLVPvNiRDFw+JJ5iuLfq2bS76D4Oo0=
+    public-key: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSpjbJBGb5d6v39EoJDqcZs2q2uVlHuLR5RV3qI0gLUDnUyBGGItQPhvDhsgSqs/73u82t69H3H2E6WayFZjd4wp3U0I8LELOoiDqTvYWRxmt0hjyHi9tUxHU9kevswOJfnrrPngU5y3nHSPNsr1y/7WBh84sJiMZkm1fNG6RSPwIDAQAB
+  jwt:
+    secret: 123456

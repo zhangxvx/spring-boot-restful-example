@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.business.mapper.SecurityConfigMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.business.model.SecurityConfig">
+        <id column="source" property="source" />
+        <result column="token" property="token" />
+        <result column="secure_key" property="secureKey" />
+        <result column="sign_key" property="signKey" />
+        <result column="url_pattern" property="urlPattern" />
+        <result column="state" property="state" />
+    </resultMap>
+
+</mapper>

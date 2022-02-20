@@ -1,1 +1,1 @@
-com.example.config.sharding.DefaultShardingAlgorithm
+com.example.system.config.sharding.DefaultShardingAlgorithm

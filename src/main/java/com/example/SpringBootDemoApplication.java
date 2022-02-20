@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 
 @Slf4j
 @EnableCaching
-@MapperScan("com.example.mapper")
+@MapperScan("com.example.business.mapper")
 @ServletComponentScan
 @SpringBootApplication
 public class SpringBootDemoApplication implements CommandLineRunner {

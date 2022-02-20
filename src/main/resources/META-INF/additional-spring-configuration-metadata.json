@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "security.aes.key",
+      "type": "java.lang.String",
+      "description": "Description for security.aes.key."
+    },
+    {
+      "name": "security.rsa.public-key",
+      "type": "java.lang.String",
+      "description": "Description for security.rsa.public-key."
+    },
+    {
+      "name": "security.rsa.private-key",
+      "type": "java.lang.String",
+      "description": "Description for security.rsa.private-key."
+    }
+  ]
+}
