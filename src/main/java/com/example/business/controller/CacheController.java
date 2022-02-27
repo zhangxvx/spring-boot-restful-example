@@ -1,7 +1,7 @@
 package com.example.business.controller;
 
-import com.example.business.controller.base.BaseController;
-import com.example.system.entity.ResponseMessage;
+import com.example.system.controller.BaseController;
+import com.example.system.entity.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -19,18 +19,18 @@ public class CacheController extends BaseController {
     private CacheManager cacheManager;
 
     @RequestMapping("/clear")
-    public ResponseMessage<Object> clear(@RequestParam String cacheName) {
+    public Result<Object> clear(@RequestParam String cacheName) {
         log.info("clear cache cacheName:{}", cacheName);
         Cache cache = cacheManager.getCache(cacheName);
         if (cache != null) {
             log.info("cacheManager:{}. clear cacheName:{}.", cacheManager.getClass().getSimpleName(), cacheName);
             cache.clear();
         }
-        return ResponseMessage.ok();
+        return Result.success();
     }
 
     @RequestMapping("/clearAll")
-    public ResponseMessage<Object> clearAll() {
+    public Result<Object> clearAll() {
         log.info("clear cache all");
         cacheManager.getCacheNames().forEach(cacheName -> {
             Cache cache = cacheManager.getCache(cacheName);
@@ -39,6 +39,6 @@ public class CacheController extends BaseController {
                 cache.clear();
             }
         });
-        return ResponseMessage.ok();
+        return Result.success();
     }
 }

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 
-public class SecurityTest {
+public class SecureTest {
     @Test
     public void aes() {
         String key = RandomUtil.randomString(32);

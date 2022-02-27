@@ -1,7 +1,5 @@
 package com.example.system.annotation;
 
-import com.example.system.enums.SecurityType;
-
 import java.lang.annotation.*;
 
 /**
@@ -11,7 +9,7 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Security {
+public @interface Secure {
     /**
      * 请求是否解密，默认是
      */
@@ -21,15 +19,5 @@ public @interface Security {
      * 响应是否加密，默认是
      */
     boolean encrypt() default true;
-
-    /**
-     * 加密算法
-     */
-    SecurityType secure() default SecurityType.RSA;
-
-    /**
-     * 签名算法
-     */
-    SecurityType sign() default SecurityType.MD5withRSA;
 }
 

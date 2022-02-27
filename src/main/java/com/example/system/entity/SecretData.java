@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class SecurityMessage {
+public class SecretData {
 
     /**
      * 加密数据
@@ -18,7 +18,7 @@ public class SecurityMessage {
      */
     private String sign;
 
-    public SecurityMessage(String encryptData, String sign) {
+    public SecretData(String encryptData, String sign) {
         this.encryptData = encryptData;
         this.sign = sign;
     }

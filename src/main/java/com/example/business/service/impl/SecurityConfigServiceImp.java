@@ -1,11 +1,12 @@
 package com.example.business.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.business.mapper.SecurityConfigMapper;
 import com.example.business.model.SecurityConfig;
 import com.example.business.service.SecurityConfigService;
-import com.example.system.enums.SecurityType;
-import com.example.system.util.SecurityUtil;
+import com.example.system.constant.CacheNameConstant;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,16 +21,22 @@ import org.springframework.stereotype.Service;
 public class SecurityConfigServiceImp extends ServiceImpl<SecurityConfigMapper, SecurityConfig> implements SecurityConfigService {
 
     @Override
-    public boolean verify(String data, String signed, String source, SecurityType sign) {
-        SecurityConfig securityConfig = baseMapper.selectOneBySource(source);
-        String signKey = securityConfig.getSignKey();
-        return SecurityUtil.verify(data, signKey, signed, sign);
+    public String getSecureKeyBySource(String source) {
+        SecurityConfig securityConfig = getSecurityConfig(source);
+        return securityConfig == null ? null : securityConfig.getSecureKey();
     }
 
     @Override
-    public String encrypt(String data, String source, SecurityType secure) {
-        SecurityConfig securityConfig = baseMapper.selectOneBySource(source);
-        String secureKey = securityConfig.getSecureKey();
-        return SecurityUtil.encrypt(data, secureKey, secure);
+    public String getSignKeyBySource(String source) {
+        SecurityConfig securityConfig = getSecurityConfig(source);
+        return securityConfig == null ? null : securityConfig.getSignKey();
+    }
+
+    @Override
+    @Cacheable(value = CacheNameConstant.DAY_3, keyGenerator = "myKeyGenerator")
+    public SecurityConfig getSecurityConfig(String source) {
+        QueryWrapper<SecurityConfig> wrapper = new QueryWrapper<>();
+        wrapper.eq("source", source);
+        return baseMapper.selectOne(wrapper);
     }
 }

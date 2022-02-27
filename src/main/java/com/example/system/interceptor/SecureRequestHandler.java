@@ -1,11 +1,13 @@
 package com.example.system.interceptor;
 
+import cn.hutool.core.util.StrUtil;
 import com.example.business.service.SecurityConfigService;
-import com.example.system.annotation.Security;
+import com.example.system.annotation.Secure;
 import com.example.system.constant.SystemConstant;
-import com.example.system.entity.SecurityMessage;
-import com.example.system.exception.SecurityException;
-import com.example.system.util.SecurityUtil;
+import com.example.system.entity.SecretData;
+import com.example.system.enums.ResultCode;
+import com.example.system.exception.ResultException;
+import com.example.system.util.RSAUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,9 +23,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -31,10 +31,7 @@ import java.util.Objects;
  */
 @Slf4j
 @RestControllerAdvice
-public class SecurityRequestHandler implements RequestBodyAdvice {
-    @Resource
-    Map<Method, String> methodURIMap;
-
+public class SecureRequestHandler implements RequestBodyAdvice {
     @Resource
     ObjectMapper objectMapper;
 
@@ -43,39 +40,40 @@ public class SecurityRequestHandler implements RequestBodyAdvice {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return methodParameter.getDeclaringClass().isAnnotationPresent(Security.class) || Objects.requireNonNull(methodParameter.getMethod()).isAnnotationPresent(Security.class);
+        return methodParameter.getDeclaringClass().isAnnotationPresent(Secure.class) || Objects.requireNonNull(methodParameter.getMethod()).isAnnotationPresent(Secure.class);
     }
 
     @Override
     public HttpInputMessage beforeBodyRead(HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) throws IOException {
-        Security security = parameter.getMethodAnnotation(Security.class);
-        if (security == null) {
-            security = parameter.getDeclaringClass().getAnnotation(Security.class);
+        Secure secure = parameter.getMethodAnnotation(Secure.class);
+        if (secure == null) {
+            secure = parameter.getDeclaringClass().getAnnotation(Secure.class);
         }
-        String requestURI = methodURIMap.get(parameter.getMethod());
-        String body = IOUtils.toString(inputMessage.getBody());
 
-        if (security.decrypt()) {
+        if (secure.decrypt()) {
+            String body = IOUtils.toString(inputMessage.getBody());
             HttpHeaders headers = inputMessage.getHeaders();
             String source = headers.getFirst(SystemConstant.SOURCE);
-            if (Objects.isNull(source)) {
-                throw new SecurityException("来源渠道缺失");
+            if (StrUtil.isBlank(source)) {
+                throw new ResultException(ResultCode.SOURCE_IS_BLANK);
             }
-            SecurityMessage securityMessage = objectMapper.readValue(body, SecurityMessage.class);
-            String encryptBody = securityMessage.getEncryptData();
-            String signed = securityMessage.getSign();
-            String decryptBody = SecurityUtil.decrypt(encryptBody, security.secure());
-            assert decryptBody != null;
-            boolean verify = securityConfigService.verify(decryptBody, signed, source, security.sign());
+
+            String signKey = securityConfigService.getSignKeyBySource(source);
+            if (StrUtil.isBlank(signKey)) {
+                throw new ResultException(ResultCode.SOURCE_NOT_VALID);
+            }
+
+            SecretData secretData = objectMapper.readValue(body, SecretData.class);
+            String encryptBody = secretData.getEncryptData();
+            String signed = secretData.getSign();
+
+            String decryptBody = RSAUtil.decryptByPrivateKey(encryptBody);
+            boolean verify = RSAUtil.verify(decryptBody, signed, signKey);
             if (verify) {
-                log.debug("beforeBodyRead. requestURI:{}. decrypt:true. verify:true. secure:{}. sign:{}. body:{}. request:{}.", requestURI, security.secure(), security.sign(), securityMessage, decryptBody);
+                log.debug("beforeBodyRead. source:{}. body:{}. request:{}.", source, secretData, decryptBody);
                 return new DecryptHttpInputMessage(headers, IOUtils.toInputStream(decryptBody));
             }
-            log.debug("beforeBodyRead. requestURI:{}. decrypt:true. verify:false. secure:{}. sign:{}. body:{}.", requestURI, security.secure(), security.sign(), securityMessage);
-            throw new SecurityException("验签失败");
         }
-
-        log.debug("beforeBodyRead. requestURI:{}. decrypt:false. body:{}.", requestURI, body);
         return inputMessage;
     }
 

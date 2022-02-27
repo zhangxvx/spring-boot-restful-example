@@ -1,10 +1,9 @@
 package com.example.business.controller;
 
 
-import com.example.business.controller.base.BaseController;
 import com.example.business.model.FlowLog;
 import com.example.business.service.FlowLogService;
-import com.example.system.entity.ResponseMessage;
+import com.example.system.controller.BaseController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,11 +31,11 @@ public class FlowLogController extends BaseController {
     FlowLogService flowLogService;
 
     @PostMapping("/add")
-    public ResponseMessage<Object> add(@RequestParam String name) {
+    public FlowLog add(@RequestParam String name) {
         FlowLog flowLog = new FlowLog();
         flowLog.setApplyId(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
         flowLog.setName(name);
         flowLogService.save(flowLog);
-        return ResponseMessage.ok(flowLog);
+        return flowLog;
     }
 }

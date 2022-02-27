@@ -1,9 +1,9 @@
 package com.example.system.controller;
 
-import com.example.system.entity.ResponseMessage;
+import com.example.system.entity.Result;
+import com.example.system.enums.ResultCode;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,8 +17,7 @@ public class DefaultErrorController extends AbstractErrorController {
     }
 
     @RequestMapping
-    public ResponseMessage<Object> error(HttpServletRequest request) {
-        HttpStatus status = getStatus(request);
-        return new ResponseMessage<>(status);
+    public Result<Object> error(HttpServletRequest request) {
+        return Result.failure(ResultCode.INTERNAL_ERROR);
     }
 }

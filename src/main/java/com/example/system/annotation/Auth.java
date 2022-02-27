@@ -1,8 +1,6 @@
 package com.example.system.annotation;
 
 
-import com.example.system.enums.AuthType;
-
 import java.lang.annotation.*;
 
 /**
@@ -11,9 +9,5 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Authentication {
-    /**
-     * 身份认证方式
-     */
-    AuthType type() default AuthType.JWT;
+public @interface Auth {
 }

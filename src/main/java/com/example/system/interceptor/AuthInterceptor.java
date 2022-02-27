@@ -1,10 +1,12 @@
 package com.example.system.interceptor;
 
-import com.example.system.annotation.Authentication;
-import com.example.system.annotation.Security;
+import cn.hutool.core.util.StrUtil;
+import com.example.system.annotation.Auth;
 import com.example.system.constant.SystemConstant;
-import com.example.system.enums.AuthType;
-import com.example.system.util.AuthUtil;
+import com.example.system.enums.ResultCode;
+import com.example.system.exception.ResultException;
+import com.example.system.util.JwtTokenUtil;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -18,33 +20,23 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HandlerMethod handlerMethod = (HandlerMethod) handler;
-        if (handlerMethod.getMethod().isAnnotationPresent(Authentication.class) || handlerMethod.getMethod().getDeclaringClass().isAnnotationPresent(Authentication.class)) {
-            Authentication annotation = handlerMethod.getMethodAnnotation(Authentication.class);
+        if (handlerMethod.getMethod().isAnnotationPresent(Auth.class) || handlerMethod.getMethod().getDeclaringClass().isAnnotationPresent(Auth.class)) {
+            Auth annotation = handlerMethod.getMethodAnnotation(Auth.class);
             if (annotation == null) {
-                annotation = handlerMethod.getMethod().getDeclaringClass().getAnnotation(Authentication.class);
-            }
-            AuthType authType = annotation.type();
-            String token = request.getHeader(SystemConstant.TOKEN);
-            boolean verify = AuthUtil.verify(token, authType);
-            if (verify) {
-                log.debug("authentication preHandle. requestURI:{}. auth:{}. verify:true.", request.getRequestURI(), authType);
-                return true;
+                annotation = handlerMethod.getMethod().getDeclaringClass().getAnnotation(Auth.class);
             }
 
-            if (handlerMethod.getMethod().isAnnotationPresent(Security.class) || handlerMethod.getMethod().getDeclaringClass().isAnnotationPresent(Security.class)) {
-                Security security = handlerMethod.getMethodAnnotation(Security.class);
-                if (security == null) {
-                    security = handlerMethod.getMethod().getDeclaringClass().getAnnotation(Security.class);
-                }
-                request.setAttribute(SystemConstant.SECURITY, security);
-                log.debug("authentication preHandle. requestURI:{}. auth:{}. verify:false. encrypt:{}. secure:{}. sign:{}.", request.getRequestURI(), authType, security.encrypt(), security.secure(), security.sign());
-            } else {
-                log.debug("authentication preHandle. requestURI:{}. auth:{}. verify:false. encrypt:false.", request.getRequestURI(), authType);
+            String token = request.getHeader(SystemConstant.TOKEN);
+            if (StrUtil.isBlank(token)) {
+                throw new ResultException(ResultCode.TOKEN_IS_BLANK);
             }
-            request.getRequestDispatcher(SystemConstant.UNAUTHORIZED).forward(request, response);
-            return false;
+            try {
+                Claims claims = JwtTokenUtil.verify(token);
+                log.info("uri:{}. claims:{}.", request.getRequestURI(), claims);
+            } catch (Exception e) {
+                throw new ResultException(ResultCode.TOKEN_NOT_VALID);
+            }
         }
-        log.debug("authentication preHandle. requestURI:{}. no authentication.", request.getRequestURI());
         return true;
     }
 }

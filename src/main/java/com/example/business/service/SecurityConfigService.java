@@ -2,7 +2,8 @@ package com.example.business.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.business.model.SecurityConfig;
-import com.example.system.enums.SecurityType;
+import com.example.system.constant.CacheNameConstant;
+import org.springframework.cache.annotation.Cacheable;
 
 /**
  * <p>
@@ -13,8 +14,9 @@ import com.example.system.enums.SecurityType;
  * @since 2022-02-19
  */
 public interface SecurityConfigService extends IService<SecurityConfig> {
+    String getSecureKeyBySource(String source);
 
-    boolean verify(String data, String signed, String source, SecurityType sign);
+    String getSignKeyBySource(String source);
 
-    String encrypt(String data, String source, SecurityType secure);
+    SecurityConfig getSecurityConfig(String source);
 }
