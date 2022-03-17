@@ -1,5 +1,6 @@
 package com.example.business.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.business.mapper.FlowLogMapper;
 import com.example.business.model.FlowLog;
@@ -17,4 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class FlowLogServiceImp extends ServiceImpl<FlowLogMapper, FlowLog> implements FlowLogService {
 
+    @Override
+    public Page<FlowLog> pageList(Page<FlowLog> page, String name) {
+        return baseMapper.selectPageList(page, name);
+    }
 }

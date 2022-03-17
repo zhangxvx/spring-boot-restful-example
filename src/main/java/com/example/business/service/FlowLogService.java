@@ -1,5 +1,6 @@
 package com.example.business.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.business.model.FlowLog;
 
@@ -13,4 +14,5 @@ import com.example.business.model.FlowLog;
  */
 public interface FlowLogService extends IService<FlowLog> {
 
+    Page<FlowLog> pageList(Page<FlowLog> page, String name);
 }

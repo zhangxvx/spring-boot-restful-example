@@ -3,6 +3,8 @@ package com.example.business.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
 import java.time.LocalDateTime;
 
@@ -29,9 +31,11 @@ public class FlowLog {
     @TableField("id_no")
     private String idNo;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField("apply_time")
     private LocalDateTime applyTime;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField("update_time")
     private LocalDateTime updateTime;
 

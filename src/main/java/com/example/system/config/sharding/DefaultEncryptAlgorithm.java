@@ -1,5 +1,6 @@
 package com.example.system.config.sharding;
 
+import cn.hutool.core.util.HexUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -40,7 +41,7 @@ public class DefaultEncryptAlgorithm implements EncryptAlgorithm {
             return null;
         }
         byte[] result = getCipher(Cipher.ENCRYPT_MODE).doFinal(String.valueOf(plaintext).getBytes(StandardCharsets.UTF_8));
-        return DatatypeConverter.printBase64Binary(result);
+        return HexUtil.encodeHexStr(result);
     }
 
     @SneakyThrows(GeneralSecurityException.class)
@@ -49,7 +50,7 @@ public class DefaultEncryptAlgorithm implements EncryptAlgorithm {
         if (null == ciphertext) {
             return null;
         }
-        byte[] result = getCipher(Cipher.DECRYPT_MODE).doFinal(DatatypeConverter.parseBase64Binary(ciphertext));
+        byte[] result = getCipher(Cipher.DECRYPT_MODE).doFinal(HexUtil.decodeHex(ciphertext));
         return new String(result, StandardCharsets.UTF_8);
     }
 
