@@ -40,6 +40,7 @@ public class RedisConfiguration {
                 .disableCachingNullValues();
 
         Map<String, RedisCacheConfiguration> expires = new HashMap<>();
+        expires.put(CacheNameConstant.SECOND_30, defaultConfig.entryTtl(Duration.ofSeconds(30)));
         expires.put(CacheNameConstant.MINUTE_15, defaultConfig.entryTtl(Duration.ofMinutes(15)));
         expires.put(CacheNameConstant.MINUTE_30, defaultConfig.entryTtl(Duration.ofMinutes(30)));
         expires.put(CacheNameConstant.HOUR_1, defaultConfig.entryTtl(Duration.ofHours(1)));
